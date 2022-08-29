@@ -1,0 +1,40 @@
+{
+    "cSpell.language": "en-GB",
+    "editor.wordWrap": "wordWrapColumn",
+    "files.autoSave": "afterDelay",
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "latex-workshop.latex.watch.usePolling": true,
+    "editor.wordWrapColumn": 80,
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "Latex Recipe",
+            "tools": [
+                "pdflatex",
+                "pdflatex"
+            ]
+        }
+    ],
+    "ltex.language": "en-GB",
+    "cSpell.customDictionaries": {
+        "custom-dictionary-workspace": {
+            "name": "custom-dictionary-workspace",
+            "path": "${workspaceFolder:masters_thesis}/.vscode/ltex.dictionary.en-GB.txt",
+            "addWords": true,
+            "scope": "workspace"
+        }
+    },
+    "latex-workshop.latex.tools": [
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-shell-escape",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+    ]
+}

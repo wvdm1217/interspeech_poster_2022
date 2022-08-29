@@ -1,0 +1,138 @@
+\ProvidesPackage{beamerthemeicassp2019}
+% \ProvidesPackage{beamer-skripsie-2020}
+
+% Colours
+\definecolor{darkestgray}{HTML}{404040}
+\definecolor{darkgray}{HTML}{555555}
+\definecolor{gray}{HTML}{7F7F7F}
+\definecolor{lightgray}{HTML}{E0E0E0}
+\definecolor{lightgray2}{HTML}{E6E6E6}
+
+% Layout
+\usepackage{ragged2e}
+\usepackage{tcolorbox}
+\newtcolorbox{mybox}{colframe=darkestgray,colback=white,arc=0.5ex,boxrule=0.25ex}
+
+% Headline colours and fonts
+\setbeamercolor{cboxb}{fg=black,bg=darkestgray}
+% \setbeamercolor{headline}{bg=lightgray2}
+\setbeamercolor{title in headline}{fg=darkestgray}
+\setbeamercolor{author in headline}{fg=darkgray}
+\setbeamercolor{institute in headline}{fg=darkgray}
+
+% Body colours and fonts
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamercolor{block title}{fg=darkestgray,bg=white}
+% \setbeamerfont{block title}{size=\huge}
+\setbeamerfont{block title}{size=\Large,series=\bfseries}
+% \setbeamerfont{block title}{size=\Large,series=\rmfamily}
+% \setbeamerfont{block title}{size=\LARGE} %,series=\bfseries}
+
+% Footline colours and fonts
+\setbeamercolor{footline}{bg=lightgray}
+\setbeamerfont{footline}{size=\normalsize}
+
+% Itemize environment
+\setbeamercolor{itemize item}{fg=darkgray}
+\setbeamercolor{enumerate item}{fg=darkgray}
+\setbeamercolor{enumerate subitem}{fg=darkgray}
+\renewcommand\textbullet{\ensuremath{\bullet}}
+\setbeamertemplate{itemize item}{\raisebox{0.12ex}{\textbullet}\hskip0.1em}
+\setbeamertemplate{itemize subitem}{\raisebox{0.12ex}{\textbullet}\hskip0.1em}
+\setbeamerfont{itemize/enumerate body}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\normalsize}
+\setbeamertemplate{itemize/enumerate body begin}{\setlength{\leftmargini}{1.5em}}
+% \makeatletter
+% \def\@listi{\leftmargin\leftmarginii
+% \topsep 1ex % Spacing before lists
+% \parsep 0\p@ \@plus\p@
+% \itemsep 6pt} % Spacing between items
+% \makeatother
+
+% Beamer theme
+\setbeamertemplate{navigation symbols}{}
+
+% Headline
+\setbeamertemplate{headline}{
+\vspace{-1.2cm}
+\begin{beamercolorbox}[wd=\paperwidth]{headline}
+    \leavevmode
+    \begin{columns}[c]
+        \begin{column}{.2\paperwidth}
+            \begin{center}
+                \hspace*{6cm} \includegraphics[height=10cm,trim={0 1cm 0.0cm 1cm},clip]{branding/SU_horizontal_RGB_without_slogan.pdf} %\includegraphics[height=7.5cm]{fig/USlogo} \hspace{2cm} \includegraphics[height=7.5cm]{fig/IE_CMYK-crop}
+            \end{center}
+% %             \raggedleft
+% %             \vspace{1cm}
+% %             \begin{center}
+%                 \includegraphics[height=8cm]{fig/USlogo} \hspace{2cm} \includegraphics[height=8cm]{fig/IE_CMYK-crop} \hspace*{0.5cm}
+% %                 ~\hspace{2cm} \includegraphics[height=9cm]{fig/USlogo-stack} \hfill \raisebox{1cm}{\includegraphics[height=7.5cm]{fig/IE_CMYK-crop}} \hspace{1cm}~
+% %             \end{center}
+        \end{column}
+
+        \begin{column}{0.6\linewidth}
+            \vskip6ex
+            \centering
+            \usebeamercolor{title in headline}{\color{fg}\Huge{\textbf{\inserttitle}}\\[1ex]}
+            \usebeamercolor{author in headline}{\color{fg}\Large{\insertauthor}\\[0.5ex]}
+            \usebeamercolor{institute in headline}{\color{fg}\large{\insertinstitute}\\[1ex]~}
+        \end{column}
+
+        \begin{column}{.2\paperwidth}
+            \begin{center}
+                \hspace{-10cm}
+                \includegraphics[trim={21cm 30cm 21cm 30cm},clip,height=8cm]{branding/medialab_logo.pdf}\hspace{3.5cm}
+                \includegraphics[height=8.25cm]{branding/IE_CMYK-crop.pdf}  \hspace*{0.3\textwidth}
+            \end{center}
+%             \raggedright
+%             \hspace*{0cm}
+% %             \vspace{1cm}
+% %             \begin{center}
+% %                 ~\hfill 
+%                 \includegraphics[height=8.75cm]{fig/edinburgh_whitebg-crop} \hspace{1cm}
+%                 \includegraphics[height=8.75cm]{fig/TTIC}
+% %             \end{center}
+        \end{column}
+    \end{columns}
+%  \vspace{0.2in}
+%  \begin{beamercolorbox}[wd=47in,colsep=0.15cm]{cboxb}\vspace*{-4pt}\end{beamercolorbox}
+ \vspace{-1cm}
+\end{beamercolorbox}
+}
+
+% Block
+\setbeamertemplate{block begin}
+{
+    \begin{mybox}
+    \par\vskip\medskipamount
+    \begin{beamercolorbox}[colsep*=0ex,dp={1.5ex},center]{block title}
+        \vskip-1ex
+        \usebeamerfont{block title}\insertblocktitle
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[colsep*=0ex,sep=1ex,vmode]{block body}
+%     \begin{beamercolorbox}[colsep*=0ex,sep=2ex,vmode]{block body}
+%         \justifying
+%     \begin{mybox}
+%     \par\vskip\medskipamount
+%     \begin{beamercolorbox}[colsep*=0ex,dp={2.5ex},center]{block title}
+%         \vskip-1ex
+%         \usebeamerfont{block title}\insertblocktitle
+%     \end{beamercolorbox}
+%     \begin{beamercolorbox}[colsep*=0ex,vmode]{block body}
+% %     \begin{beamercolorbox}[colsep*=0ex,sep=2ex,vmode]{block body}
+%         \justifying
+}
+\setbeamertemplate{block end}
+{
+    \end{beamercolorbox}
+    \end{mybox}
+}
+
+% Footline
+\setbeamertemplate{footline}{
+\begin{beamercolorbox}[ht=4.75ex,leftskip=1cm,rightskip=1cm]{footline}%
+    Poster presented at Interspeech 2022. [Incheon Korea, September 2022] \hfill      Audio demo and samples: \url{https://rf5.github.io/interspeech2022/}
+    \vskip1.3ex
+\end{beamercolorbox}
+}
