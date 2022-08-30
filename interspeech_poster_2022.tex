@@ -81,444 +81,257 @@
 \begin{document}
 
 \begin{frame}[t]
-\begin{columns}[T]
+    \begin{columns}[T]
 
-\begin{column}{.01\linewidth}\end{column} % border column
-
-
-\begin{column}{.33\linewidth}
-\centering
-\begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
-
-% ================================
-%  BACKGROUND BLOCK
-% ================================
-\begin{block}{Unsupervised acoustic unit discovery}
-
-    % \begin{itemize}
-    %     \setlength{\itemsep}{0.5ex}
-    %     \item Voice conversion (VC) can be used to augment training data of automatic speech recognition (ASR) systems:
-    % \end{itemize}
-    
-    % % \vspace{1ex}
-    
-    % \begin{columns}[c]
-    %     \column{.01\textwidth}
-        
-    %     \column{.98\textwidth}
-    %     \begin{center}
-    %         % \includegraphics[width=0.7\textwidth]{figures/data_aug_diagram.pdf}
-    %          \includegraphics[width=1.0\textwidth]{figures/data_aug_diagram_v2.pdf}
-    %     \end{center}
-        
-    %     \column{.01\textwidth}
-    % \end{columns}
-    
-    % \vspace{1ex}
-
-    % \begin{itemize}
-    %     \setlength{\itemsep}{0.5ex}
-        
-    %     \item Attempts using VC for English ASR augmentation have met limited success.
-    %     \item ASR still struggles in very low-resource settings with $<1$~h of labeled speech.
-    %     \item \mybf{Research question:} can we design a VC system which can be used cross-lingually to improve ASR performance in very low-resource settings?
-        
-    %     \item To be practically useful for ASR augmentation, it needs to:
-        
-    %     \begin{enumerate}
-    %         % \item \nonparallel{be trainable with non-parallel data}
-    %         \item \zeroshot{work on unseen languages and speakers (any-to-any VC model)}
-    %         \item \realtime{run reasonably fast so that augmenting an entire dataset is feasible.}
-    %         \item \nonparallel{retain high quality in low-resource settings} % \highqual = green
-    %     \end{enumerate}
-        
-    %     % \item \mybf{Goal:} compare existing voice conversion (VC) models and attempt to develop a new model to better satisfy these requirements.
-    % \end{itemize}
-\end{block}
+        \begin{column}{.01\linewidth}\end{column} % border column
 
 
-% \vfill
+        \begin{column}{.33\linewidth}
+            \centering
+            \begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
 
-% \vfill
+                    % ================================
+                    %  BACKGROUND BLOCK
+                    % ================================
+                    \begin{block}{Unsupervised acoustic unit discovery}
 
-% ================================
-%  COMPONENTS OF VC SYSTEMS
-% ================================
-\begin{block}{Vector-quantised neural networks}
-    % \vspace{0.2cm}
-    % % \begin{center}
-    % %     \centerline{\includegraphics[width=1\linewidth, trim={0cm 0cm 2cm 0cm},clip]{fig2/vc-blockdiag.pdf}}
-    % % \end{center}
-    % % \vspace{-2.5cm}
+                        \begin{itemize}
+                            \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item Annotating speech is often not possible for many low-resource languages. 
+                            \item Unsupervised acoustic unit discovery (AUD)  aims to solve this by finding a set of phone-like units from speech that resembles the phonetic inventory of a language.
+                        \end{itemize}
 
-    % \vspace*{-1.3cm}
-    % \begin{columns}[c]
-    %     \column{.01\textwidth}
-        
-    %     \column{.98\textwidth}
-    %     \begin{center}
-    %         \centerline{\includegraphics[width=0.9\textwidth,trim={0.0cm 0cm 0.0cm 0cm},clip]{figures/data_aug_cross_lingual.pdf}}
-    %     \end{center}
-        
-    %     \column{.01\textwidth}
-    % \end{columns}
-    
-    % \vspace{-0.3cm}
+                    \end{block}
 
-    % Combined \highqual{augmented} and original low-resource data now contains \\ \zeroshot{greater speaker diversity} $\implies$ improve ASR generalization.
-    
-\end{block}
+                    % ================================
+                    %  COMPONENTS OF VC SYSTEMS
+                    % ================================
+                    \begin{block}{Vector-quantised neural networks}
 
-% ================================
-%  Experimental details
-% ================================
-\begin{block}{Latent Dirichlet allocation}
-    % \begin{itemize}
-    % \vspace{-0.5cm}
-    %     \setlength{\itemsep}{0.5ex}
-    %     \item \mybf{VC training:} use fixed pretrained \texttt{CPC-Big} encoder and train rest on non-parallel LibriSpeech 960~h training set.
-    %     % \item \mybf{Pretrained networks:} use fixed \texttt{CPC-Big} model trained on English LibriSpeech.%\highqual{($\sim$9~min)}.
-    %     \item \mybf{ASR setup:} use pretrained \texttt{XLSR-53} wav2vec 2.0 model, fine-tune with CTC on \highqual{labelled low-resource settings with varying amounts of augmented data}. No LM used in very low-resource settings -- unlikely to be available.
-    %     \item \mybf{Low-resource settings}: simulated low-resource English baseline, final evaluations with 10~min of \zeroshot{Afrikaans, Setswana, isiXhosa, Sepedi} speech.
-    % \end{itemize}
-\end{block}
+                        \begin{itemize}
+                            \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item Recently vector-quantised (VQ) neural networks such as the variational autoencoder (VQ-VAE) and contrastive predictive coding (VQ-CPC) have performed well in unsupervised AUD\@.
+                            \item Despite good performance, the number of VQ codes in these models (512 for the VQ model in this paper)
+                                  is often far more than the number of true phone units used in a language (in the order of 50).
+                            \item To more closely match the phonetic inventory of a language, the larger set of VQ codes therefore need to be mapped to a smaller set.
+                        \end{itemize}
 
-% % ================================
-% %  HGST
-% % ================================
-% \begin{block}{Hierarchical global style tokens}
-% Introduced by TODO in TODO as a way to separate speaker information from speech. 
-%     \begin{center}
-%         \includegraphics[width=0.7\linewidth]{figures/hgst.pdf}
-%     \end{center}
-%     % \centerline{\includegraphics[width=0.9\textwidth]{fig2/settings.pdf}}
-% %     \centerline{\includegraphics[scale=2.75]{xlingual_keyword_spotting}}
-% \end{block}
 
-}\end{minipage}
-\end{column}
+                        \begin{figure}[t]\label{fig:aud_example}
+                            \centering
+                            \includegraphics[width=\linewidth]{figures/aud_example}
+                            \caption[Acoustic unit discovery of an utterance]{
+                                This figure gives a spectrogram of the spoken utterance, ``Is very difficult''.
+                                The labels on the figure from top to bottom are from a VQ-VAE, Markov chain latent Dirichlet allocation (MCLDA) and a professional transcriber.}
+                        \end{figure}
+
+                    \end{block}
+
+                    % ================================
+                    %  Latent Dirichlet allocation
+                    % ================================
+                    \begin{block}{Latent Dirichlet allocation}
+
+                        \begin{itemize}
+                            \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item Latent Dirichlet allocation (LDA) is widely used for unsupervised topic modelling on sets of documents.
+                            \item The LDA model is a parametric bag-of-VQ-codes model and considers no temporal information. 
+                        \end{itemize}
+
+                        \vspace{-0.5cm}
+                        \begin{figure}[t]
+                            \centering
+                            \includegraphics[width=\linewidth]{figures/base_lda}
+                            \caption{The cluster graph of latent Dirichlet allocation model.}
+                            \label{fig:base_lda}
+                        \end{figure}
+
+                    \end{block}
+
+                }\end{minipage}
+        \end{column}
 
 
 
-\begin{column}{.33\linewidth}
-\centering
-\begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
+        \begin{column}{.33\linewidth}
+            \centering
+            \begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
 
-% ================================
-%  One-to-one models
-% ================================
-% \begin{block}{One-to-one models}
-%     \centerline{\includegraphics[width=1\textwidth,trim={0.5cm 0cm 2cm 0cm},clip]{fig2/one-to-one-models.pdf}} %l b r t
-% \end{block}
+                    % ================================
+                    %  Markov chain latent Dirichlet allocation
+                    % ================================
+                    \begin{block}{Markov chain latent Dirichlet allocation}
 
-% \vfill
+                        \begin{itemize}
+                            \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item We extend LDA to include a Markov chain between adjacent phone units to model transitions.
+                            \item With this model we introduce the scaler parameter $a$ to increase the probability of repeating phone-like units.
+                            $$
+                            \setlength\itemsep{0em}
+                            p(\bm{Z}_n,\bm{Z}_{n-1}) =
+                            \begin{cases}
+                              \frac{a}{K^2 + K(a-1)}, & Z_n = Z_{n-1}    \\
+                              \frac{1}{K^2 + K(a-1)}, & Z_n \neq Z_{n-1}
+                            \end{cases}
+                            \label{eq:transition_probability}
+                         $$
+                            \end{itemize}
 
-% ================================
-%  Many-to-many models
-% ================================
-\begin{block}{Markov chain latent Dirichlet allocation}
-    % \vspace*{-1.5cm}
-    % \vspace*{-0.3cm}
-    % \centerline{\includegraphics[width=0.75\textwidth]{figures/HGST12_training.pdf}}
-    % \begin{itemize}
-    %     % \vspace{-0.5cm}
-    %     \setlength{\itemsep}{0.5ex}
-    %     \item Style encoder isolates speaker identity in style vector $\mathbf{s}_{\text{src}}$; content encoder captures linguistic content as CPC feature sequence. 
-    %     \item Self-supervised objective: $L_2$ loss between source and predicted mel-spectrogram from Tacotron 2 style decoder $D$.
-    % \end{itemize}
-\end{block}
+                        \vspace{-0.5cm}
+                        \begin{figure}[t]
+                            \centering
+                            \includegraphics[width=\linewidth]{figures/werner_lda}
+                            \caption{The cluster graph of Markov chain latent Dirichlet allocation model.}
+                            \label{fig:base_lda}
+                        \end{figure}
 
-\begin{block}{Experimental setup}
-    % \vspace{-0.3cm}
-    % \centerline{\includegraphics[width=0.75\textwidth]{figures/HGST12_inference.pdf}}
+                    \end{block}
 
-    % % \begin{columns}[c]
-    % %     \column{.01\textwidth}
-        
-    % %     \column{.46\textwidth}
-    % %     \begin{center}
-    % %         Training setup
-    % %         \vspace*{0.7cm}
-    % %         \includegraphics[width=1\textwidth,trim={0.0cm 0cm 0.0cm -0.0cm},clip]{figures/HGST12_training.pdf}
-    % %     \end{center}
-        
-    % %     \column{.52\textwidth}
-    % %     \begin{center}
-    % %         Inference setup
-    % %         \vspace*{0.7cm}
-    % %         \includegraphics[width=1\textwidth, trim={0cm 0cm 0.0cm -0.0cm},clip]{figures/HGST12_inference.pdf}
-    % %     \end{center}
-        
-    % %     \column{.01\textwidth}
-    % % \end{columns}
-    % Feed different utterances into style and content encoder branches $\implies$ output obtains speaker from style encoder, linguistic content from content encoder.
-\end{block}
+                    \begin{block}{Experimental setup}
 
-% \vfill
+                        \begin{itemize}
+                            \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item A VQ-VAE model is used to extract utterances with 512 VQ codes from the Buckeye speech corpus.
+                            \item The Markov chain LDA model uses these VQ codes to discover 50 latent phone-like units.
+                            \item We compare the base LDA and expanded Markov chain LDA to an established CPC-Big + \(K\)-means model that clusters CPC representations directly into 50 units.
 
-% ================================
-%  StarGAN-ZSVC
-% ================================
-% \begin{block}{Cross-lingual augmentation setup}
-%     % \vspace*{-1.3cm}
-%     % \begin{columns}[c]
-%     %     \column{.01\textwidth}
-        
-%     %     \column{.98\textwidth}
-%     %     \begin{center}
-%     %         \centerline{\includegraphics[width=1\textwidth,trim={0.3cm 0cm 0.3cm 0cm},clip]{fig2/StarGAN-ZSVC.pdf}}
-%     %     \end{center}
-        
-%     %     \column{.01\textwidth}
-%     % \end{columns}
-%     % \vspace{-2.1cm}
-% \end{block}
+                        \end{itemize}
+                    \end{block}
+
+                    % ================================
+                    %  Metrics
+                    % ================================
+                    \begin{block}{Metrics} % {\large (\%)}}
+
+                        \begin{itemize}
+                            \vspace{-0.4ex}
+                            \setlength{\itemsep}{0.5ex}
+                            \item We compare the output of models to the ground truth transcriptions in terms of phone segmentation and cluster quality.
+                        \end{itemize}
+
+                        \begin{figure}[!t]
+                            \centering
+                            \includegraphics[width=0.95\linewidth]{figures/phone_boundaries}
+                            \caption[Phone boundary example]{
+                                The following figure illustrates how to determine if a phone boundary is correct.
+                            }
+                            \label{fig:phone_boundaries}
+                        \end{figure}
+                    \end{block}
+
+
+                }\end{minipage}
+        \end{column}
 
 
 
-% \vfill
+        \begin{column}{.33\linewidth}
+            \centering
+            \begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
 
-% ================================
-%  Speaker embedding results
-% ================================
-\begin{block}{Metrics} % {\large (\%)}}
+                    % ================================
+                    %  Results: Phone Segmentation
+                    % ================================
+                    \begin{block}{Results: Phone Segmentation}
+                        % Extent to which each model satisfies the four practicality requirement:
 
-    % \begin{columns}[T]
-    %     \begin{column}{.49\linewidth}
-    %     \centering
-    %     \sisetup{detect-family}
-    %     \begin{table}[t]
-    %         \renewcommand{\arraystretch}{1.1}
-    %         \centering
-    %         \caption{Re-synthesis results in terms of
-    %         ASR performance on original and converted data.
-    %         % The English-trained VC system is applied to
-    %         % English, Sepedi and Afrikaans evaluation data.
-    %         Lower W/CER (\%) is more intelligible.
-    %         }
-    %         \footnotesize
-    %         \tablecaptionsep
-    %         \label{tab:res-resynth}
-    %         \begin{tabularx}{0.95\linewidth}{@{}LS[table-format=2.1]S[table-format=2.1]S[table-format=2.1]S[table-format=2.1]S[table-format=2.1]S[table-format=2.1]@{}}
-    %         \toprule
-    %          & \multicolumn{2}{c}{{English}} & \multicolumn{2}{c}{{Afrikaans}} &  \multicolumn{2}{c}{{Sepedi}} \\
-    %         \cmidrule(l){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7}
-            
-    %         VC Model & {WER} & {CER} & {WER} & {CER} & {WER} & {CER}\\
-    %         \midrule
-    %         \textit{Original data} & 5.7 & 1.9 & 6.3 & 4.3 & 2.1 & 0.9 \\
-    %         \addlinespace
-    %         Full model & 20.6 & 9.6 & 32.5 & 11.0 & 20.4 & 9.5  \\
-    %         Without HGST & 21.3 & 9.9 & 34.0 & 11.9 & 21.1 & 9.9 \\
-    %         Without $Q$ & \ubold 7.1 & \ubold 2.6 & \ubold 17.0 & \ubold 4.6 & \ubold 3.7 & \ubold 1.6 \\
-    %         \bottomrule
-    %         \end{tabularx}
-    %     \end{table}
-            
-    %     \end{column}
+                            \vspace{-0.5ex}
 
-    
+                        \begin{table}[!t]
+                            \caption{Phone segmentation results (\%) on Buckeye speech test.
+                            100\% in all metrics would be perfect segmentation. 
+                            Negative R-value}
+                            \mytable
+                            \centering
+                            %  \begin{tabularx}{\linewidth}{@{} lllll @{}}
+                            \begin{tabularx}{\linewidth}{@{}lRRRR@{}}
+                                \toprule
+                                Model            & \textit{Precision}         & \textit{Recall}         & \textit{F-score}       & \textit{R-value}         \\
+                                \midrule
+                                \multicolumn{2}{@{}l}{\underline{\textit{Speaker dependent}}}                        \\
+                                CPC-Big + km-50  & $35.3$      & $94.0$      & $51.3$      & $-44.4$                 \\
+                                VQ-VAE           & $32.1$      & $\bm{97.6}$ & $48.1$      & $-80.7$                 \\
+                                LDA              & $36.0$      & $94.9$      & $52.00$     & $-45.0$                 \\
+                                Markov chain LDA & $\bm{55.1}$ & $72.4$      & $\bm{62.2}$ & $\hphantom{-}\bm{55.6}$ \\
+                                \addlinespace
+                                \multicolumn{2}{@{}l}{\underline{\textit{Speaker independent}}}                      \\
+                                CPC-Big + km-50  & $35.5$      & $93.9$      & $51.6$      & $-42.5$                 \\
+                                VQ-VAE           & $32.0$      & $\bm{97.7}$ & $48.2$      & $-76.2$                 \\
+                                LDA              & $36.8$      & $93.3$      & $52.8$      & $-33.4$                 \\
+                                Markov chain LDA & $\bm{55.4}$ & $66.4$      & $\bm{60.4}$ & $\hphantom{-}\bm{61.6}$ \\
+                                \bottomrule
+                            \end{tabularx}
+                            \label{tab:seg_results}
+                        \end{table}
 
-    %     \begin{column}{.49\linewidth}
-    %     \centering
-    %         \sisetup{detect-family}
-    %         \begin{table}[t]
-    %             \renewcommand{\arraystretch}{1.1}
-    %             \centering
-    %             \caption{Speaker similarity error rates (\%) -- Lower values
-    %             mean converted is closer to reference than source (better~VC).
-    %             % indicate that converted utterances are more often closer to the reference speaker than the source speaker (better~VC).
-    %             }
-    %             \tablecaptionsep
-    %             \footnotesize
-    %             \label{tab:res-spk-sim}
-    %             \begin{tabularx}{0.95\linewidth}{@{}LS[table-format=2.1]S[table-format=2.1]S[table-format=2.1]@{}}
-    %             \toprule
-    %             VC Model & {English} & {Afrikaans} & {Sepedi} \\
-    %             \midrule
-    %             Full model & 8.7 & 22.0 & 58.3 \\
-    %             Sans HGST & \ubold 2.3 & \ubold 6.9 & \ubold 34.4 \\
-    %             Sans $Q$ & 99.7 & 99.8 & 99.9 \\
-    %             \bottomrule
-    %             \end{tabularx}
-    %             % \aftertableskip
-    %         \end{table}            
-    %         \small
-    %         % MOS for zero-shot setting.
-    %     \end{column}
-    % \end{columns}
-    % \vspace{0.3cm}
-    % Without HGST: better VC; without $Q$: more intelligible.\\
-    % \mybf{Summary}: decent VC and intelligibility when using both HGST and $Q$.
-\end{block}
+                    \end{block}
 
+                    % ================================
+                    %  Results: Cluster quality
+                    % ================================
+                    \begin{block}{Results: Cluster quality}
+                        \vspace{-0.5ex}
+                        \begin{table}[!t]
+                            \caption{Clustering quality results (\%) on Buckeye speech test set.
+                            The desired purity and mutual information is 100\% while a lower singleton \% is better.}
+                            \centering
+                            \mytable
+                            \begin{tabularx}{\linewidth}{@{}  lRRR @{}}
+                                \toprule
 
-}\end{minipage}
-\end{column}
+                                {Model}          & \textit{Cluster Purity}    & \textit{Singletons}                & \textit{Mutual Information}       \\
+                                \midrule
+                                \multicolumn{2}{@{}l}{\underline{\textit{Speaker dependent}}}              \\
+                                CPC-Big + km-50  & $33.1$      & $\hphantom{1}9.3$           & $\bm{39.6}$ \\
+                                VQ-VAE           & $\bm{34.0}$ & $26.7$                      & $38.4$      \\
+                                LDA              & $24.1$      & $20.2$                      & $26.6$      \\
+                                Markov chain LDA & $29.1$      & $\hphantom{\bm{.}}\bm{4.5}$ & $30.6$      \\
+                                \addlinespace
+                                \multicolumn{2}{@{}l}{\underline{\textit{Speaker independent}}}            \\
+                                CPC-Big + km-50  & $\bm{32.3}$ & $\hphantom{1}9.3$           & $\bm{37.8}$ \\
+                                VQ-VAE           & $31.8$      & $27.0$                      & $34.3$      \\
+                                LDA              & $21.5$      & $18.9$                      & $22.0$      \\
+                                Markov chain LDA & $27.3$      & $\hphantom{\bm{.}}\bm{4.0}$ & $24.7$      \\
+                                \bottomrule
+                            \end{tabularx}
+                            \label{tab:cluster_results}
+                        \end{table}
 
+                 \end{block}
 
+                    % \vfill
+                    % ================================
+                    % Conclusions
+                    % ================================
+                    \begin{block}{Conclusions}
+                        % \vspace{-0.0ex}
+                        \begin{itemize}
+                            % \vspace{-0.5cm}
+                            \setlength{\itemsep}{0.5ex}
+                            \item We have shown that the inclusion of temporal information in an LDA model increases the AUD phone segmentation and mutual information.
+                            \item The Markov chain LDA achieved better phone segmentation results than the base LDA and the CPC-Big +  $K$-means method.
+                            \item The mutual information from our Markov chain LDA model was lower than that of the CPC-Big + \(K\)-means method we compared against, but achieved better phone segmentation results.
+                            \item The introduction of more informative priors could result in an increased mutual information.
 
-\begin{column}{.33\linewidth}
-\centering
-\begin{minipage}[T]{.97\textwidth}\parbox[t][\columnheight]{\textwidth}{
+                        \end{itemize}
 
-
-% \vfill
-
-% ================================
-%  Objective metric results
-% ================================
-\begin{block}{Results: Phone Segmentation}
-    % Extent to which each model satisfies the four practicality requirement:
-    
-%     \vspace{0.5ex}
-
-
-% \begin{table}[tb]
-%     \renewcommand{\arraystretch}{1.1}
-%     \sisetup{detect-family}
-%     \centering
-%     \caption{
-%     WERs (\%) on LibriSpeech test data for ASR models trained
-%     with increasing amounts of VC- and SpecAug-augmented data, with and without 4-gram LM~\mbox{decoding.}
-%     }
-%     \tablecaptionsep
-%     \small
-%     \label{tab:res-aug-levels}
-%     \begin{tabularx}{0.8\linewidth}{@{}LcS[table-format=2.1]@{\hspace{0.15cm}}S[table-format=2.1]@{\hspace{0.15cm}}S[table-format=2.1]S[table-format=2.1]@{\hspace{0.15cm}}S[table-format=2.1]@{\hspace{0.15cm}}S[table-format=2.1]@{}}
-
-%     \toprule
-%     & & \multicolumn{3}{c}{{No LM}} & \multicolumn{3}{c}{{LM decoded}} \\
-%     \cmidrule(l){3-5} \cmidrule(l){6-8}
-    
-%     Augmentation & Amount & {10 min} & {1 h} & {10 h} & {10 min} & {1 h} & {10 h} \\
-%     \midrule
-%     None & 0\% & 47.7	& \ubold 30.4 &	13.4 & 17.4 &	\ubold 10.6 &	\ubold 7.5  \\
-%     VC & 100\% & 43.8 &	32.7 &	13.5 & \ubold 17.2 &	11.4 &	7.6 \\
-%     VC & 500\% & 43.5 &	34.4 &	14.4 & 17.9 &	11.9 &	8.1 \\
-%     SpecAug & 100\% & 44.3 &	31.8 &	\ubold 13.1 & 18.8 &	11.2 &	7.6 \\
-%     SpecAug & 500\% & 43.1 &	34.4 &	13.3 & 17.7	& 12.1 &	7.7 \\
-%     VC$\rightarrow$SpecAug & 100\%  & 42.5 & 31.3 &	13.2 & 18.5 &	11.2 &	7.6 \\
-%     VC$\rightarrow$SpecAug & 500\%  & \ubold 42.4 &	35.0 &	14.2 & 18.4	& 12.5 &	8.1 \\
-%     \bottomrule
-%     \end{tabularx}
-%     % \aftertableskip
-% \end{table}
-% \vspace{0.5cm}
-% \mybf{Insight:} augmentation only helps when we have very poor \zeroshot{speaker diversity} $\implies$ only helps in very low-resource settings with $\sim$  \nonparallel{10~min of labelled data}.
-
-%     \begin{center}
-%         \small
-% %         \begingroup
-%         \mytable
-%         \begin{table}[!hb]
-%             \centering
-%             \renewcommand{\arraystretch}{1.1}
-%             \small
-%             \begin{tabular}{l@{\hspace{0.4cm}}p{5.5cm} @{\hspace{0.4cm}}p{4.5cm}@{\hspace{0.4cm}}p{8.5cm}@{\hspace{0.5cm}}l}
-        
-%             \toprule
-%             Model & Non-parallel trainable & Zero-shot capable & Performance in low-resource setting & Speed \\
-%             \midrule
-%             Linear & \textcolor{softred}{No} & \textcolor{softred}{No} & \textcolor{softred}{Very poor} & \textcolor[HTML]{19a822}{Very fast}\\
-%             UNet & \textcolor{softred}{No} & \textcolor{softred}{No} & \textcolor[HTML]{c6341d}{Poor} & \textcolor{softred}{Very slow} \\
-%             DBLSTM & \textcolor{softred}{No} & \textcolor{softred}{No} & \textcolor[HTML]{e87000}{Marginally poor} & \textcolor[HTML]{e87000}{Marginally slow}\\
-%             StarGAN-VC2 & \textcolor{softgreen}{Yes} & \textcolor{softred}{No} & \textcolor[HTML]{b7b700}{Moderate} & \textcolor[HTML]{b7b700}{Moderate} \\
-%             AutoVC & \textcolor{softgreen}{Yes} & \textcolor{softgreen}{Yes} & \textcolor[HTML]{b7b700}{Moderate} & \textcolor[HTML]{e87000}{Marginally slow}\\
-%             StarGAN-ZSVC & \textcolor{softgreen}{Yes} & \textcolor{softgreen}{Yes} & \textcolor[HTML]{19a822}{Good} & \textcolor[HTML]{34ba07}{Fast} \\
-%             \bottomrule
-%             \end{tabular}
-%         \end{table}
-% %         \endgroup
-%     \end{center}
-
-%     \vspace{-1.5ex}
-\end{block}
-
-% ================================
-%  Mean opinion scores
-% ================================
-\begin{block}{Results: Cluster quality}
-
-% \begin{table}[!t]
-%     \renewcommand{\arraystretch}{1.1}
-%     \centering
-%     \sisetup{detect-family}
-%     \caption{ASR results (\%) on test data of four low-resource languages when trained on  \nonparallel{10 min} of real audio data and different amounts of additional VC- and combined VC-SpecAug augmented data. Sepedi$^*$ uses a non-default training procedure.
-%     }
-%     \tablecaptionsep
-%     \small
-%     \label{tab:res-zs}
-%     \begin{tabularx}{0.6\linewidth}{@{}l@{\hspace{0.8cm}}Lc@{\hspace{0.8cm}}c@{\hspace{0.8cm}}c@{}}
-    
-%     \toprule
-%     Language & Augmentation & Amount & WER & CER \\
-%     \midrule
-%     \multirow{3}{*}{Afrikaans}
-%     & None                    & 0\% & 52.3 & 15.9 \\
-%     & VC                      & 100\% & \ubold 48.9 & \ubold 15.0 \\ 
-%     % & VC                      & 500\% & 61.5 & 19.5 \\
-%     & VC$\rightarrow$SpecAug  & 100\% & 53.5 & 16.5 \\
-%     % & VC$\rightarrow$SpecAug  & 500\% & 83.9 & 33.1 \\
-%     % & SpecAug                 & 100\% & 73.9 & 25.3 \\
-%     \midrule
-%     \multirow{3}{*}{Setswana} 
-%     & None                    & 0\% & 68.9 & 26.1 \\
-%     & VC                      & 100\% & \ubold 65.9 & \ubold 25.1 \\ 
-%     % & VC                      & 500\% & 78.2 & 31.1 \\
-%     & VC$\rightarrow$SpecAug  & 100\% & 69.3 & 26.8 \\
-%     % & VC$\rightarrow$SpecAug  & 500\% & 87.0 & 40.3 \\
-%     \midrule
-%     \multirow{3}{*}{isiXhosa}
-%     & None                    & 0\% & 63.2 & 15.5 \\
-%     & VC                      & 100\% & \ubold  56.5 & \ubold 13.8 \\ 
-%     % & VC                      & 500\% & 65.0 & 16.4 \\
-%     & VC$\rightarrow$SpecAug  & 100\% & 69.3 & 26.8 \\
-%     % & VC$\rightarrow$SpecAug  & 500\% & 89.4 & 28.2 \\
-%     \midrule
-%     \multirow{3}{*}{Sepedi*}
-%     & None                    & 0\% & 92.6 & 50.7 \\
-%     & VC                      & 100\% & \ubold 52.8 & \ubold 19.9 \\ 
-%     % & VC                      & 500\% & 56.4 & 21.5 \\
-%     & VC$\rightarrow$SpecAug  & 100\% & 97.8 & 69.1 \\
-%     % & VC$\rightarrow$SpecAug  & 500\% & 98.4 & 73.7 \\
-%     \bottomrule
-%     \end{tabularx}
-%     % \aftertableskip
-% \end{table}
-% \footnotesize{* different training configuration to allow training convergence.}
-\end{block}
-
-% \vfill
-% ================================
-% Conclusions
-% ================================
-\begin{block}{Conclusions}
-\vspace{-0.23cm}
-\begin{itemize}
-    \setlength{\itemsep}{0.5ex}
-    \item Conclusion content
-    % \item VC can be used for data augmentation to improve ASR, but primarily in \nonparallel{very low-resource settings} with limited speaker diversity.
-    % \item Cross-lingual VC to drastically different languages unseen during training works well enough to improve ASR performance.
-    % \item \mybf{Future}: while our cross-lingual VC augmentation is complementary with SpecAugment, how does it compare/combine with other forms of augmentation? And how well do different VC systems work for cross-lingual VC to unseen languages?
-    % % \item No existing model satisfies all practicality requirements.
-    % % \item StarGAN-ZSVC better satisfies the requirements, but still not perfect.
-    % % \item \mybf{Future:} apply VC systems to practical downstream applications.
-
-
-\end{itemize}
-\end{block}
+                    \end{block}
 
 
 
-}\end{minipage}
-\end{column}
+                }\end{minipage}
+        \end{column}
 
 
 
-\begin{column}{.01\linewidth}\end{column} % border column
+        \begin{column}{.01\linewidth}\end{column} % border column
 
-\end{columns}
+    \end{columns}
 \end{frame}
 
 \end{document}
